@@ -61,6 +61,12 @@ public class CommonConstant {
 
         public static final String SIGN_UP = HEAD_API + USER + "/sign-up";
 
+        public static final String ACTIVE_USER = HEAD_API + USER + "/active-through-email";
+
+        public static final String GET_LIST_USER = HEAD_API + USER + "/list-user";
+
+        public static final String DELETE_USER = HEAD_API + USER + "/delete-user";
+
     }
 
 }

@@ -31,6 +31,21 @@ public class CapstoneUtils {
             userBeans.setCreateTime(user.getCreateTime());
         }
 
+        if(null != user.getGender()){
+            userBeans.setGender(user.getGender());
+        }
+
+        if(null != user.getIsActive()){
+            userBeans.setIsActive(user.getIsActive());
+        }
+
+        if(null != user.getAddress()){
+            userBeans.setAddress(user.getAddress());
+        }
+
+        if(null != user.getImageUrl()){
+            userBeans.setImageUrl(user.getImageUrl());
+        }
 
         return userBeans;
     }

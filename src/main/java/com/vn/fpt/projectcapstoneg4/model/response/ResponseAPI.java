@@ -11,7 +11,6 @@ public class ResponseAPI<T> {
     private String message;
     private T data;
 
-    private List<String> type;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Integer totalRecords;
@@ -58,14 +57,6 @@ public class ResponseAPI<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public List<String> getType() {
-        return type;
-    }
-
-    public void setType(List<String> type) {
-        this.type = type;
     }
 
     public Integer getTotalRecords() {

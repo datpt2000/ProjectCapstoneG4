@@ -14,4 +14,7 @@ public class UserBean {
     private String department;
     private Boolean isActive;
     private Date createTime;
+    private String gender;
+    private String address;
+    private String imageUrl;
 }
