@@ -1,8 +1,10 @@
 package com.vn.fpt.projectcapstoneg4.controller;
 
 import com.vn.fpt.projectcapstoneg4.common.CommonConstant;
+import com.vn.fpt.projectcapstoneg4.model.bean.UserBean;
 import com.vn.fpt.projectcapstoneg4.model.request.LoginRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.SignUpRequest;
+import com.vn.fpt.projectcapstoneg4.model.request.user.ChangePasswordRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.user.DeleteUserRequest;
 import com.vn.fpt.projectcapstoneg4.model.response.ResponseAPI;
 import com.vn.fpt.projectcapstoneg4.service.UserService;
@@ -73,6 +75,18 @@ public class UserController extends BaseController {
     @PostMapping(value = CommonConstant.USER_API.DELETE_USER)
     public ResponseAPI<Object> deleteUser(@RequestBody DeleteUserRequest request) {
         return userService.deleteUser(request);
+    }
+
+    @PostMapping(value = CommonConstant.USER_API.CHANGE_PASSWORD)
+    public ResponseAPI<Object> changePassword(@RequestBody ChangePasswordRequest request) {
+        UserBean bean = getUser();
+        if(null != bean){
+            if(StringUtils.hasLength(request.getPassword())){
+                return userService.changePassword(request, bean);
+            }
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NOT_VALID, CommonConstant.COMMON_MESSAGE.INVALID_PARAMETER);
+        }
+        return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NON_AUTH, CommonConstant.COMMON_MESSAGE.USER_NOT_LOGIN);
     }
 
 

@@ -8,6 +8,7 @@ import com.vn.fpt.projectcapstoneg4.config.TokenProvider;
 import com.vn.fpt.projectcapstoneg4.entity.User;
 import com.vn.fpt.projectcapstoneg4.model.bean.UserBean;
 import com.vn.fpt.projectcapstoneg4.model.request.SignUpRequest;
+import com.vn.fpt.projectcapstoneg4.model.request.user.ChangePasswordRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.user.DeleteUserRequest;
 import com.vn.fpt.projectcapstoneg4.model.response.LoginResponse;
 import com.vn.fpt.projectcapstoneg4.model.response.ResponseAPI;
@@ -190,6 +191,21 @@ public class UserServiceImpl implements UserService {
             return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.EXCEPTION, e.getMessage());
         }
 
+    }
+
+    @Override
+    public ResponseAPI<Object> changePassword(ChangePasswordRequest request, UserBean bean) {
+        try {
+            User userChange = userRepository.findByEmailAndDeleteFlg(bean.getEmail(), "0");
+            if (null != userChange) {
+                userChange.setPassword(passwordEncoder.encode(request.getPassword()));
+                userRepository.saveAndFlush(userChange);
+                return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.OK, CommonConstant.COMMON_MESSAGE.OK);
+            }
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NOT_VALID, "ERROR");
+        } catch (Exception e) {
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.EXCEPTION, e.getMessage());
+        }
     }
 
     public String handleAvatar(MultipartFile file) throws IOException {

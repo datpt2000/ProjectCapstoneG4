@@ -67,6 +67,9 @@ public class CommonConstant {
 
         public static final String DELETE_USER = HEAD_API + USER + "/delete-user";
 
+        public static final String CHANGE_PASSWORD = HEAD_API + USER + "/change-password";
+
+
     }
 
 }

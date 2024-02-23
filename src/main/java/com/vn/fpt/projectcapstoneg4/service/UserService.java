@@ -1,8 +1,10 @@
 package com.vn.fpt.projectcapstoneg4.service;
 
 import com.vn.fpt.projectcapstoneg4.entity.User;
+import com.vn.fpt.projectcapstoneg4.model.bean.UserBean;
 import com.vn.fpt.projectcapstoneg4.model.request.LoginRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.SignUpRequest;
+import com.vn.fpt.projectcapstoneg4.model.request.user.ChangePasswordRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.user.DeleteUserRequest;
 import com.vn.fpt.projectcapstoneg4.model.response.LoginResponse;
 import com.vn.fpt.projectcapstoneg4.model.response.ResponseAPI;
@@ -19,6 +21,7 @@ public interface UserService {
 
     public ResponseAPI<Object> getListSearch(String name);
     public ResponseAPI<Object> deleteUser(DeleteUserRequest request);
+    public ResponseAPI<Object> changePassword(ChangePasswordRequest request, UserBean bean);
 
 
 }
