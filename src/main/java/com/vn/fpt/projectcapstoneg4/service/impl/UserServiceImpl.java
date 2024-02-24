@@ -5,6 +5,7 @@ import com.vn.fpt.projectcapstoneg4.common.CommonConstant;
 import com.vn.fpt.projectcapstoneg4.config.CustomerUserDetails;
 import com.vn.fpt.projectcapstoneg4.config.SecurityWebConfig;
 import com.vn.fpt.projectcapstoneg4.config.TokenProvider;
+import com.vn.fpt.projectcapstoneg4.entity.Player;
 import com.vn.fpt.projectcapstoneg4.entity.User;
 import com.vn.fpt.projectcapstoneg4.model.bean.UserBean;
 import com.vn.fpt.projectcapstoneg4.model.request.SignUpRequest;
@@ -12,6 +13,7 @@ import com.vn.fpt.projectcapstoneg4.model.request.user.ChangePasswordRequest;
 import com.vn.fpt.projectcapstoneg4.model.request.user.DeleteUserRequest;
 import com.vn.fpt.projectcapstoneg4.model.response.LoginResponse;
 import com.vn.fpt.projectcapstoneg4.model.response.ResponseAPI;
+import com.vn.fpt.projectcapstoneg4.model.response.player.PlayerResponse;
 import com.vn.fpt.projectcapstoneg4.repository.UserRepository;
 import com.vn.fpt.projectcapstoneg4.service.UserService;
 import net.bytebuddy.utility.RandomString;
@@ -106,12 +108,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseAPI<Object> signupUser(SignUpRequest request, MultipartFile file, String getSiteUrl) {
         try {
-            if (userRepository.existsByEmail(request.email)) {
+            if (userRepository.existsByEmail(request.getEmail())) {
                 return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NOT_VALID, "EMAIL EXISTED");
             } else {
                 User userEntity = new User();
                 if (file.getSize() > 0) {
-                    userEntity.setImageUrl(handleAvatar(file));
+                    userEntity.setImageUrl(CapstoneUtils.handleAvatar(file));
                 }
                 userEntity.setEmail(request.getEmail());
                 userEntity.setFirstName(request.getFirstName());
@@ -139,6 +141,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseAPI<Object> updateUser(SignUpRequest request, MultipartFile file) {
+        try {
+
+            User userUpdate = userRepository.findByIdAndDeleteFlg(request.getId(),  "0");
+            if (null != userUpdate) {
+                if (file.getSize() > 0) {
+                    userUpdate.setImageUrl(CapstoneUtils.handleAvatar(file));
+                }
+                userUpdate.setFirstName(request.getFirstName());
+                userUpdate.setLastName(request.getLastName());
+                userUpdate.setAuthority(request.getAuthority());
+                userUpdate.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").parse(request.getDateOfBirth()));
+                userUpdate.setGender(request.getGender());
+                userUpdate.setAddress(request.getAddress());
+                userRepository.saveAndFlush(userUpdate);
+                return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.OK, "OK");
+            } else {
+                return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NOT_VALID, "ERROR_UPDATE");
+            }
+        } catch (Exception e) {
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.EXCEPTION, CommonConstant.COMMON_MESSAGE.EXCEPTION);
+        }
+    }
+
+    @Override
     public ResponseAPI<Object> activeThroughEmail(String verificationCode, String email) {
         try {
             User userActive = userRepository.findByEmailAndVerificationCodeAndDeleteFlg(email, verificationCode, "0");
@@ -161,8 +188,8 @@ public class UserServiceImpl implements UserService {
             if (null == name) {
                 name = "";
             }
-            List<User> getListSearch = userRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseAndDeleteFlg(name, name, "0");
-            if (null != getListSearch && getListSearch.size() > 0) {
+            List<User> getListSearch = userRepository.findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseAndDeleteFlg(name);
+            if (null != getListSearch && !getListSearch.isEmpty()) {
                 List<UserBean> listResponse = new ArrayList<>();
                 for (User user : getListSearch) {
                     listResponse.add(CapstoneUtils.convertUserToBeans(user));
@@ -208,9 +235,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public String handleAvatar(MultipartFile file) throws IOException {
-        return Base64.getEncoder().encodeToString(file.getBytes());
+    @Override
+    public ResponseAPI<Object> detailUser(long id) {
+        try {
+            User detailUser =  userRepository.findByIdAndDeleteFlg(id, "0");
+            if (null != detailUser ) {
+                return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.OK, CommonConstant.COMMON_MESSAGE.OK, CapstoneUtils.convertUserToBeans(detailUser));
+            }
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.NOT_VALID, "NOT_FIND_USER");
+        } catch (Exception e) {
+            return new ResponseAPI<>(CommonConstant.COMMON_RESPONSE.EXCEPTION, CommonConstant.COMMON_MESSAGE.EXCEPTION);
+        }
     }
+
 
     public void activeCreateUser(SignUpRequest request, String verifyCode, String siteURL) {
         try {

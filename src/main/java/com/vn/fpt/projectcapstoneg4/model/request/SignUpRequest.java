@@ -8,20 +8,20 @@ import java.util.Date;
 @Data
 public class SignUpRequest {
 
-    public String email;
+    private long id;
+    private String email;
 
     private String password;
 
+    private String firstName;
 
-    public String firstName;
-
-    public String lastName;
+    private String lastName;
 
     private String address;
 
-    public String gender;
+    private String gender;
 
-    public String dateOfBirth;
+    private String dateOfBirth;
 
     private String authority;
 
@@ -33,7 +33,18 @@ public class SignUpRequest {
                 && null != dateOfBirth
                 && StringUtils.hasLength(authority)
                 && StringUtils.hasLength(address)
-                && StringUtils.hasLength(password);
+                && StringUtils.hasLength(password)
+                && StringUtils.hasLength(gender);
 
+    }
+
+    public boolean isValidUpdate() {
+        return  id > 0
+                && StringUtils.hasLength(firstName)
+                && StringUtils.hasLength(lastName)
+                && null != dateOfBirth
+                && StringUtils.hasLength(authority)
+                && StringUtils.hasLength(address)
+                && StringUtils.hasLength(gender);
     }
 }

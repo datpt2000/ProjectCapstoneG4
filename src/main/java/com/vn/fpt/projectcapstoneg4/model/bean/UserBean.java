@@ -11,7 +11,6 @@ public class UserBean {
     private String authority;
     private String fullname;
     private String deleteFlg;
-    private String department;
     private Boolean isActive;
     private Date createTime;
     private String gender;

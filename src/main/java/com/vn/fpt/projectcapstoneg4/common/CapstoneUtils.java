@@ -2,6 +2,10 @@ package com.vn.fpt.projectcapstoneg4.common;
 
 import com.vn.fpt.projectcapstoneg4.entity.User;
 import com.vn.fpt.projectcapstoneg4.model.bean.UserBean;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Base64;
 
 public class CapstoneUtils {
 
@@ -50,6 +54,9 @@ public class CapstoneUtils {
         return userBeans;
     }
 
+    public static String handleAvatar(MultipartFile file) throws IOException {
+        return Base64.getEncoder().encodeToString(file.getBytes());
+    }
 //    public static String readSqlFile(String filename) {
 //        ClassLoader classLoader = org.apache.commons.lang3.StringUtils.class.getClassLoader();
 //        File file = new File(classLoader.getResource(filename).getFile());

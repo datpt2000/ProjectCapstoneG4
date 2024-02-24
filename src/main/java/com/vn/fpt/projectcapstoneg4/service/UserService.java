@@ -16,12 +16,14 @@ public interface UserService {
     public User getUserByEmail(String email);
     public LoginResponse handleLogin(String username, String password);
     public ResponseAPI<Object> signupUser(SignUpRequest request, MultipartFile file, String getSiteUrl);
-
+    public ResponseAPI<Object> updateUser(SignUpRequest request, MultipartFile file);
     public ResponseAPI<Object> activeThroughEmail(String verificationCode, String email);
-
     public ResponseAPI<Object> getListSearch(String name);
     public ResponseAPI<Object> deleteUser(DeleteUserRequest request);
     public ResponseAPI<Object> changePassword(ChangePasswordRequest request, UserBean bean);
+
+    public ResponseAPI<Object> detailUser(long id);
+
 
 
 }
